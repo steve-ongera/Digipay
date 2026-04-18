@@ -1,121 +1,117 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from './assets/vite.svg'
-import heroImg from './assets/hero.png'
-import './App.css'
+// app.jsx — DigiPay root
+const { useState, useEffect } = React;
 
-function App() {
-  const [count, setCount] = useState(0)
+const App = () => {
+  const [user, setUser]     = useState(null);
+  const [page, setPage]     = useState('dashboard');
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [booting, setBooting] = useState(true);
+
+  const { addToast, ToastContainer } = window.useToast();
+
+  // Restore session
+  useEffect(() => {
+    if (window.auth.isAuth()) {
+      setUser(window.auth.user());
+    }
+    setBooting(false);
+  }, []);
+
+  const handleAuth = (usr) => {
+    setUser(usr);
+    setPage('dashboard');
+  };
+
+  const handleLogout = async () => {
+    try { await window.api.logout(); } catch (_) {}
+    window.auth.clear();
+    setUser(null);
+    setPage('dashboard');
+    addToast('Logged out successfully', 'info');
+  };
+
+  const navigate = (p) => {
+    setPage(p);
+    setSidebarOpen(false);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  if (booting) return (
+    <div style={{
+      minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center',
+      background: 'var(--bg)', flexDirection: 'column', gap: 16,
+    }}>
+      <div style={{
+        width: 64, height: 64, borderRadius: 18,
+        background: 'linear-gradient(135deg, #00D46A, #00A352)',
+        display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 30,
+        boxShadow: '0 0 28px rgba(0,212,106,0.4)',
+      }}>💚</div>
+      <div style={{ fontSize: 24, fontWeight: 800, letterSpacing: -0.5 }}>
+        Digi<span style={{ color: 'var(--green)' }}>Pay</span>
+      </div>
+      <div className="spinner" style={{ marginTop: 8 }} />
+    </div>
+  );
+
+  if (!user) return (
+    <>
+      <AuthPage onAuth={handleAuth} />
+      <ToastContainer />
+    </>
+  );
+
+  const pageProps = { addToast, setPage: navigate };
+
+  const renderPage = () => {
+    switch (page) {
+      case 'dashboard':    return <DashboardPage    {...pageProps} />;
+      case 'send':         return <SendPage         {...pageProps} />;
+      case 'deposit':      return <DepositPage      {...pageProps} />;
+      case 'withdraw':     return <WithdrawPage     {...pageProps} />;
+      case 'transactions': return <TransactionsPage {...pageProps} />;
+      case 'loans':        return <LoansPage        {...pageProps} />;
+      case 'savings':      return <SavingsPage      {...pageProps} />;
+      case 'lipa':         return <LipaPage         {...pageProps} />;
+      default:             return <DashboardPage    {...pageProps} />;
+    }
+  };
 
   return (
-    <>
-      <section id="center">
-        <div className="hero">
-          <img src={heroImg} className="base" width="170" height="179" alt="" />
-          <img src={reactLogo} className="framework" alt="React logo" />
-          <img src={viteLogo} className="vite" alt="Vite logo" />
-        </div>
-        <div>
-          <h1>Get started</h1>
-          <p>
-            Edit <code>src/App.jsx</code> and save to test <code>HMR</code>
-          </p>
-        </div>
-        <button
-          className="counter"
-          onClick={() => setCount((count) => count + 1)}
-        >
-          Count is {count}
+    <div className="app-shell">
+      {/* Mobile header */}
+      <header className="mob-header">
+        <button className="burger" onClick={() => setSidebarOpen(o => !o)}>
+          <i className={`bi bi-${sidebarOpen ? 'x' : 'list'}`} />
         </button>
-      </section>
-
-      <div className="ticks"></div>
-
-      <section id="next-steps">
-        <div id="docs">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#documentation-icon"></use>
-          </svg>
-          <h2>Documentation</h2>
-          <p>Your questions, answered</p>
-          <ul>
-            <li>
-              <a href="https://vite.dev/" target="_blank">
-                <img className="logo" src={viteLogo} alt="" />
-                Explore Vite
-              </a>
-            </li>
-            <li>
-              <a href="https://react.dev/" target="_blank">
-                <img className="button-icon" src={reactLogo} alt="" />
-                Learn more
-              </a>
-            </li>
-          </ul>
+        <div className="logo-text" style={{ fontSize: 18, fontWeight: 800 }}>
+          Digi<em style={{ color: 'var(--green)', fontStyle: 'normal' }}>Pay</em>
         </div>
-        <div id="social">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#social-icon"></use>
-          </svg>
-          <h2>Connect with us</h2>
-          <p>Join the Vite community</p>
-          <ul>
-            <li>
-              <a href="https://github.com/vitejs/vite" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#github-icon"></use>
-                </svg>
-                GitHub
-              </a>
-            </li>
-            <li>
-              <a href="https://chat.vite.dev/" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#discord-icon"></use>
-                </svg>
-                Discord
-              </a>
-            </li>
-            <li>
-              <a href="https://x.com/vite_js" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#x-icon"></use>
-                </svg>
-                X.com
-              </a>
-            </li>
-            <li>
-              <a href="https://bsky.app/profile/vite.dev" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#bluesky-icon"></use>
-                </svg>
-                Bluesky
-              </a>
-            </li>
-          </ul>
+        <div className="avatar" style={{ width: 32, height: 32, fontSize: 12 }}>
+          {(user.first_name?.[0] || user.username?.[0] || 'D').toUpperCase()}
         </div>
-      </section>
+      </header>
 
-      <div className="ticks"></div>
-      <section id="spacer"></section>
-    </>
-  )
-}
+      {/* Sidebar */}
+      <Sidebar
+        page={page}
+        setPage={navigate}
+        user={user}
+        onLogout={handleLogout}
+        open={sidebarOpen}
+        onClose={() => setSidebarOpen(false)}
+      />
 
-export default App
+      {/* Main */}
+      <main className="main-content">
+        {renderPage()}
+      </main>
+
+      <ToastContainer />
+    </div>
+  );
+};
+
+// Mount
+const root = ReactDOM.createRoot(document.getElementById('root'));
+root.render(<App />);
