@@ -1,13 +1,55 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>frontend</title>
-  </head>
-  <body>
-    <div id="root"></div>
-    <script type="module" src="/src/main.jsx"></script>
-  </body>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>DigiPay – Mobile Banking</title>
+
+  <!-- Bootstrap Icons -->
+  <link rel="stylesheet"
+    href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" />
+
+  <!-- Google Fonts: Sora + DM Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700;800&family=DM+Mono:wght@400;500&display=swap"
+    rel="stylesheet" />
+
+  <!-- App styles -->
+  <link rel="stylesheet" href="styles/main.css" />
+
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>💚</text></svg>" />
+</head>
+<body>
+  <div id="root"></div>
+
+  <!-- React + Babel via CDN (dev) -->
+  <script src="https://unpkg.com/react@18/umd/react.development.js" crossorigin></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+  <!-- Services -->
+  <script type="text/babel" src="services/api.js" data-type="module"></script>
+
+  <!-- Components -->
+  <script type="text/babel" src="components/Toast.jsx"     data-type="module"></script>
+  <script type="text/babel" src="components/Sidebar.jsx"   data-type="module"></script>
+  <script type="text/babel" src="components/BalanceCard.jsx" data-type="module"></script>
+  <script type="text/babel" src="components/TxnItem.jsx"   data-type="module"></script>
+  <script type="text/babel" src="components/Modal.jsx"     data-type="module"></script>
+
+  <!-- Pages -->
+  <script type="text/babel" src="pages/AuthPage.jsx"        data-type="module"></script>
+  <script type="text/babel" src="pages/DashboardPage.jsx"   data-type="module"></script>
+  <script type="text/babel" src="pages/SendPage.jsx"        data-type="module"></script>
+  <script type="text/babel" src="pages/DepositPage.jsx"     data-type="module"></script>
+  <script type="text/babel" src="pages/WithdrawPage.jsx"    data-type="module"></script>
+  <script type="text/babel" src="pages/TransactionsPage.jsx" data-type="module"></script>
+  <script type="text/babel" src="pages/LoansPage.jsx"       data-type="module"></script>
+  <script type="text/babel" src="pages/SavingsPage.jsx"     data-type="module"></script>
+  <script type="text/babel" src="pages/LipaPage.jsx"        data-type="module"></script>
+
+  <!-- App root -->
+  <script type="text/babel" src="src/app.jsx" data-type="module"></script>
+</body>
 </html>
