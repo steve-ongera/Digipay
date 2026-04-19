@@ -1,4 +1,4 @@
-// app.jsx — DigiPay root
+// src/app.jsx — DigiPay root
 const { useState, useEffect } = React;
 
 const App = () => {
